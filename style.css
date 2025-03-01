@@ -1,0 +1,308 @@
+:root{
+  --main-color:#008080;
+  --white-color:#faf7f7;
+  --second-color:#000080;
+  --black-color:#171717;
+  --red:rgb(98, 29, 29);
+  --background-color:#D2F0FF;
+}
+html{
+  scroll-behavior: smooth;
+}
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: rgb(238, 238, 238);
+    color: var(--black-color);
+  }
+  .logo{
+    width: 75px;
+    height:75px;
+  }
+  .fa{
+    padding: 5px;
+  }
+
+  .fa-caret-up {
+    color: green;
+  }
+  .fa-caret-down{
+    color: red;
+  }
+  .fa-caret-left{
+    color: orange;
+  }
+  /* .scroll-container {
+    width: 98.2%;  Set the width of the container 
+    background-color: #fff;
+    overflow-x: auto; 
+    border: 1px solid #ccc; 
+    padding: 10px; 
+    position: fixed;
+    top: 89%;
+    z-index: 10;
+  }
+  
+  .shares-tape {
+    white-space: nowrap; 
+  }
+  .shares-tape div {
+    display: inline-block; 
+    margin-right: 10px;
+  }
+  .ltr{
+    direction: ltr;
+    border-left: 1px solid grey;
+    background-color: #000080;
+    color: #fff;
+  }
+  .shares-tape b{
+    margin: 10px;
+  }*/
+  /* .shares-table{
+    display: flex;
+    float: left;
+    width: 30%;
+  }  */
+     /* tape part */
+.tape-container {
+  max-height: 100px;
+overflow: hidden;
+  width: 99%;
+  /* background-color: #fff; */
+  background-color: var(--second-color);
+  border: 1px solid #ccc; /* Optional: Add a border for visibility */
+  /* padding: 5px; */
+  position: fixed;
+  top: 92%;
+  z-index: 10;
+}
+.tape {
+  width: 200%;
+  display: flex;
+  animation: scroll 20s linear infinite;
+  cursor: grab;
+  user-select: none;
+ white-space: none;
+}
+
+.product {
+  position: relative;
+}
+
+.product img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+}
+.product img:hover{
+  transform: scale(1.025);
+}
+@keyframes scroll {
+  0% {
+      margin-right:20%;
+  }
+  100% {
+      margin-right: -100%;
+  }
+}
+.tape:hover {
+  animation-play-state: paused;
+  cursor:grab;
+}
+
+.tape:active {
+  cursor: grabbing;
+  animation-play-state: running;
+}
+
+.tape::-webkit-scrollbar {
+  display: none;
+}
+.ltr{
+  direction: ltr;
+  border-left: 1px solid grey;
+  background-color: #000080;
+  color: #fff;
+ 
+}
+.market-container{
+  display: flex;
+  justify-content: space-between;
+}
+/* ////////////// */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    background-color: #fff;
+  }
+  #red{
+    color: red;
+    font-weight: 900;
+  }
+  #green{
+    color: green;
+    font-weight: 900;
+   
+  }
+  #equal{
+    color: orange;
+    font-weight: 900;
+  }
+  #equal-down{
+    color: orangered;
+    font-weight: 900;
+  }
+  th, td {
+    border-bottom: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  th {
+    background-color: #fff;
+  }
+  tr td:is(:last-child , :nth-child(3)){
+direction: ltr;
+  }
+  tr:hover{
+    background-color: #ddd;
+  }
+ #diagrams h2{
+  border-right: 2px solid var(--second-color);
+    padding: 10px;
+ }
+  #about{
+    font-weight: 900;
+    font-size: larger;
+    /* width: 80%; */
+    margin: auto;
+  }
+  #about h2{
+    border-right: 2px solid var(--second-color);
+    padding: 10px;
+  }
+  .bargraph{
+    display: flex;
+    justify-content: space-between;
+    /* float: left; */
+  }
+    :is(.bargraph,.circlegraph,.exams) article{
+      width: 50%;
+      font-size: larger;
+      margin: auto auto;
+    }
+  .circlegraph{
+    display: flex;
+    justify-content: space-between;
+  }
+ 
+#circle{
+  width:100%; max-width:600px;
+display: block;
+}
+#shares{
+  width:100%;
+  height: 600px;
+  max-width:800px;
+  padding:20px;
+}
+#donutpie{
+  max-width: 700px;
+}
+.exams{
+  display: flex;
+  justify-content: space-between;
+}
+
+  header {
+  background-color: var(--background-color);
+ box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.5);
+    padding: 20px;
+  }
+  header h1{
+    color: var(--second-color);
+  }
+  
+  nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  nav ul li {
+    display: inline;
+    border-right: 1px solid var(--second-color);
+    padding: 5px;
+  }
+  nav ul li:last-child{
+border-left: 1px solid var(--second-color);
+padding: 5px;
+  }
+  
+  nav ul li a {
+    color: #171717;
+    text-decoration: none;
+  }
+  
+  section {
+    padding: 20px;
+  }
+  
+  footer {
+    background-color: var(--background-color);
+    color: var(--black-color);
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 50px;
+  }
+  .logo{
+    color: var(--second-color);
+  font-size: larger;
+  font-weight: 900;
+  }
+  .copyright{
+    font-size: smaller;
+    color: gray;
+  }
+  /* responsive */
+  @media (max-width:768px){
+    #about {
+     font-size: smaller;
+    }
+    #diagrams{
+      font-size: smaller;
+    }
+    .bargraph{
+      display: block;
+    }
+   :is(.bargraph,.circlegraph,.exams) article{
+    width: 100%;
+    font-size: smaller;
+   }
+    .circlegraph{
+      display: block;
+    }
+    .market-container{
+      display: block;
+    }
+    #shares{
+      height: 300px;
+      width: 100%;
+      padding: 3px;
+    }
+    .exams{
+      display: block;
+    }
+    /* tape responsive  */
+
+  .tape{
+    font-size: smaller;
+    width: 500%;
+  }
+
+   
+  }
+
+  

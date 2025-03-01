@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-yNlHdllG1OkNlFuKpFaVF11NoX9d/3bqEyj1Og2bvRK0da1Oc2yTHi/j0tnCfsrkIM91h9AjfXEZjmLr5Os5xg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="path/to/jquery.infinitescroll.min.js"></script>
+<style>
+    /* tape part */
+.tape-container {
+    max-height: 100px;
+overflow: hidden;
+    width: 99%;
+    background-color: #fff;
+    border: 1px solid #ccc; /* Optional: Add a border for visibility */
+    padding: 10px; /* Optional: Add padding for spacing */
+    position: fixed;
+    top: 89%;
+    z-index: 10;
+  }
+  .tape {
+    width: 200%;
+    display: flex;
+    animation: scroll 20s linear infinite;
+    cursor: grab;
+    user-select: none;
+   white-space: none;
+  }
+  
+  .product {
+    position: relative;
+  }
+  
+  .product img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+  }
+  .product img:hover{
+    transform: scale(1.025);
+  }
+  @keyframes scroll {
+    0% {
+        margin-right:20%;
+    }
+    100% {
+        margin-right: -100%;
+    }
+  }
+  .tape:hover {
+    animation-play-state: paused;
+    cursor:grab;
+  }
+  
+  .tape:active {
+    cursor: grabbing;
+    animation-play-state: running;
+  }
+  
+  .tape::-webkit-scrollbar {
+    display: none;
+  }
+  /* ////////////// */
+</style>
+<body dir="rtl">
+   
+    <div class="tape-container">
+        <div class="tape" id="productTape">
+            <div class="ltr">
+                <b><span id="green">+0.17%</span> TBC شركة <i class="fa fa-solid fa-arrow-up"></i></b>
+            </div>
+            <div class="ltr">
+                <b><span id="red">-1.47%</span> TLP شركة <i class="fa fa-solid fa-arrow-down"></i></b>
+            </div>
+            <div class="ltr">
+                <b><span id="green">+0.18%</span> CBU شركة <i class="fa fa-solid fa-arrow-up"></i></b>
+            </div>
+            <div class="ltr">
+                <b><span id="red">-1.47%</span> ماجد للتجارة شركة <i class="fa fa-solid fa-arrow-down"></i></b>
+            </div>
+            <div class="ltr">
+                <b><span id="green">+18.07%</span> غندور للالبسة شركة <i class="fa fa-solid fa-arrow-up"></i></b>
+            </div>
+            <div class="ltr">
+                <b><span id="green">+25.85%</span> ياسر الهندسية شركة <i class="fa fa-solid fa-arrow-up"></i></b>
+            </div>
+            <div class="ltr">
+                <b><span id="red">-11.13%</span> هرمز للمولدات شركة <i class="fa fa-solid fa-arrow-down"></i></b>
+            </div>
+            <div class="ltr">
+                <b><span id="green">+7.14%</span> البنك الرابي <i class="fa fa-solid fa-arrow-up"></i></b>
+            </div>
+            <div class="ltr">
+                <b><span id="equal">2.37%</span> ULK للالبسة شركة <i class="fa fa-solid fa-arrow-up" id="arrow-up-right"></i></b>
+            </div>
+            <div class="ltr">
+                <b><span id="green">+22.18%</span> HBN للمستلزمات الطبية شركة <i class="fa fa-solid fa-arrow-up"></i></b>
+            </div>
+            <div class="ltr">
+                <b><span id="equal-down">0.22%</span> FP شركة <i class="fa fa-solid fa-arrow-up" id="arrow-down-right"></i></b>
+            </div>
+            <div class="ltr">
+                <b><span id="red">-1.47%</span> REG شركة <i class="fa fa-solid fa-arrow-down"></i></b>
+            </div>
+            <div class="ltr">
+                <b><span id="green">+1.83%</span> AUD شركة <i class="fa fa-solid fa-arrow-up"></i></b>
+            </div>
+            <div class="ltr">
+                <b><span id="red">-1.47%</span> RTH شركة <i class="fa fa-solid fa-arrow-down"></i></b>
+            </div>
+        </div>
+      </div>
+</body>
+</html>
