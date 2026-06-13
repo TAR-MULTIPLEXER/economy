@@ -1,301 +1,1162 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>موقع الاحصاء العلمي</title>
-  <link rel="stylesheet" type="text/css" href="style.css">
   <link rel="shortcut icon" href="picture/logo.png" type="image/x-icon">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-yNlHdllG1OkNlFuKpFaVF11NoX9d/3bqEyj1Og2bvRK0da1Oc2yTHi/j0tnCfsrkIM91h9AjfXEZjmLr5Os5xg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  <style>
+    :root {
+      --primary: #000080;
+      --secondary: #008080;
+      --accent: #C6A961;
+      --bg: #f0f4f8;
+      --card: #ffffff;
+      --text: #1a1a1a;
+      --text-light: #666;
+      --border: #e0e0e0;
+      --shadow: 0 2px 10px rgba(0,0,0,0.08);
+      --header-height: 80px;
+      --ticker-height: 45px;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+      padding-bottom: calc(var(--ticker-height) + 15px);
+    }
+    header {
+      background: linear-gradient(135deg, #D2F0FF 0%, #b8e0f5 100%);
+      box-shadow: var(--shadow);
+      padding: 0 30px;
+      height: var(--header-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      min-width: 0;
+      flex: 1;
+    }
+    .brand-icon {
+      width: 50px;
+      height: 50px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      flex-shrink: 0;
+      overflow: hidden;
+      padding: 0;
+    }
+    .brand-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .brand-text {
+      min-width: 0;
+    }
+    .brand-text h1 {
+      color: var(--primary);
+      font-size: 1.4rem;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .brand-text p {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      margin: 0;
+      white-space: nowrap;
+    }
+    .desktop-nav ul {
+      list-style: none;
+      display: flex;
+      gap: 5px;
+    }
+    .desktop-nav ul li a {
+      display: block;
+      padding: 10px 18px;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      border-radius: 6px;
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+    .desktop-nav ul li a:hover {
+      background: var(--primary);
+      color: white;
+    }
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-size: 1.6rem;
+      cursor: pointer;
+      width: 45px;
+      height: 45px;
+      border-radius: 8px;
+      transition: background 0.3s;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+    }
+    .hamburger:hover {
+      background: rgba(0,0,128,0.1);
+    }
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: var(--header-height);
+      right: 0;
+      width: 100%;
+      background: white;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      z-index: 999;
+      transform: translateY(-100%);
+      opacity: 0;
+      visibility: hidden;
+      transition: transform 0.35s ease, opacity 0.35s ease, visibility 0.35s;
+      max-height: calc(100vh - var(--header-height));
+      overflow-y: auto;
+    }
+    .mobile-menu.active {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
+    .mobile-menu ul {
+      list-style: none;
+    }
+    .mobile-menu ul li {
+      border-bottom: 1px solid var(--border);
+    }
+    .mobile-menu ul li a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 15px 25px;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+    .mobile-menu ul li a:hover {
+      background: #f0f4f8;
+      color: var(--primary);
+    }
+    .mobile-menu ul li a i {
+      color: var(--primary);
+      width: 20px;
+      text-align: center;
+    }
+    .startbeg {
+      background: linear-gradient(135deg, var(--primary) 0%, #001a66 100%);
+      color: white;
+      padding: 60px 30px;
+      text-align: center;
+    }
+    .startbeg h2 {
+      font-size: 2.2rem;
+      margin-bottom: 15px;
+      line-height: 1.3;
+    }
+    .startbeg p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 40px 25px;
+    }
+    .section-title {
+      border-right: 4px solid var(--primary);
+      padding: 8px 15px;
+      color: var(--primary);
+      font-size: 1.6rem;
+      margin-bottom: 25px;
+      font-weight: bold;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .stat-card {
+      background: var(--card);
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      transition: transform 0.3s;
+    }
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+    .stat-card i {
+      font-size: 2.2rem;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+    .stat-card h3 {
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin: 8px 0;
+    }
+    .stat-card p {
+      color: var(--text-light);
+      font-size: 0.95rem;
+    }
+    .chart-section {
+      background: var(--card);
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      margin-bottom: 30px;
+    }
+    .chart-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+      align-items: center;
+    }
+    .chart-container {
+      position: relative;
+      width: 100%;
+      min-height: 320px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .chart-container canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100% !important;
+      height: 100% !important;
+    }
+    .chart-info {
+      padding: 15px;
+    }
+    .chart-info h3 {
+      color: var(--primary);
+      margin-bottom: 12px;
+      font-size: 1.2rem;
+    }
+    .chart-info p {
+      color: var(--text-light);
+      line-height: 1.8;
+      word-wrap: break-word;
+    }
+    .market-section {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 25px;
+      margin-bottom: 30px;
+    }
+    .table-wrapper {
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .table-wrapper h3 {
+      background: var(--primary);
+      color: white;
+      padding: 15px 20px;
+      font-size: 1.1rem;
+    }
+    .table-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 400px;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    th {
+      background: #f5f5f5;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    tr:hover {
+      background: #f9f9f9;
+    }
+
+    .up { color: green; font-weight: bold; }
+    .down { color: red; font-weight: bold; }
+    .neutral { color: orange; font-weight: bold; }
+
+    #plotChart {
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      min-height: 400px;
+      width: 100%;
+    }
+    .ticker {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: var(--primary);
+      color: white;
+      height: var(--ticker-height);
+      overflow: hidden;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+    }
+
+    .ticker-track {
+      display: flex;
+      white-space: nowrap;
+      animation: ticker-scroll 50s linear infinite;
+      will-change: transform;
+    }
+
+    .ticker:hover .ticker-track {
+      animation-play-state: paused;
+    }
+
+    .ticker-item {
+      padding: 0 25px;
+      border-left: 1px solid rgba(255,255,255,0.2);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    @keyframes ticker-scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    footer {
+      background: var(--primary);
+      color: white;
+      padding: 30px;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    footer h3 {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+
+    footer p {
+      opacity: 0.85;
+      font-size: 0.9rem;
+    }
+    @media (max-width: 992px) {
+      .chart-row {
+        grid-template-columns: 1fr;
+      }
+
+      .market-section {
+        grid-template-columns: 1fr;
+      }
+
+      .startbeg h2 {
+        font-size: 1.8rem;
+      }
+
+      .chart-container {
+        min-height: 300px;
+      }
+    }
+    @media (max-width: 768px) {
+      :root {
+        --header-height: 70px;
+        --ticker-height: 40px;
+      }
+
+      header {
+        padding: 0 15px;
+      }
+
+      .brand-text h1 {
+        font-size: 1.1rem;
+      }
+
+      .brand-text p {
+        font-size: 0.7rem;
+      }
+
+      .brand-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 1.2rem;
+      }
+
+      .desktop-nav {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .mobile-menu {
+        display: block;
+      }
+
+      .startbeg {
+        padding: 40px 20px;
+      }
+
+      .startbeg h2 {
+        font-size: 1.5rem;
+      }
+
+      .startbeg p {
+        font-size: 0.95rem;
+      }
+
+      .container {
+        padding: 25px 15px;
+      }
+
+      .section-title {
+        font-size: 1.3rem;
+      }
+
+      .chart-section {
+        padding: 18px;
+      }
+
+      .chart-container {
+        min-height: 280px;
+        max-width: 100%;
+      }
+
+      #plotChart {
+        min-height: 320px;
+      }
+
+      .ticker-item {
+        padding: 0 15px;
+        font-size: 0.8rem;
+        gap: 6px;
+      }
+
+      .stat-card {
+        padding: 20px 15px;
+      }
+
+      .stat-card h3 {
+        font-size: 1.5rem;
+      }
+
+      .stat-card i {
+        font-size: 1.9rem;
+      }
+    }
+    @media (max-width: 480px) {
+      :root {
+        --header-height: 60px;
+        --ticker-height: 36px;
+      }
+
+      header {
+        padding: 0 10px;
+      }
+
+      .brand {
+        gap: 10px;
+      }
+
+      .brand-text h1 {
+        font-size: 1rem;
+      }
+
+      .brand-text p {
+        display: none;
+      }
+
+      .brand-icon {
+        width: 38px;
+        height: 38px;
+        font-size: 1rem;
+      }
+
+      .hamburger {
+        width: 40px;
+        height: 40px;
+        font-size: 1.4rem;
+      }
+
+      .startbeg {
+        padding: 30px 15px;
+      }
+
+      .startbeg h2 {
+        font-size: 1.3rem;
+      }
+
+      .startbeg p {
+        font-size: 0.88rem;
+      }
+
+      .container {
+        padding: 20px 12px;
+      }
+
+      .section-title {
+        font-size: 1.15rem;
+        padding: 6px 12px;
+      }
+
+      .stat-card {
+        padding: 18px 12px;
+      }
+
+      .stat-card h3 {
+        font-size: 1.4rem;
+      }
+
+      .stat-card i {
+        font-size: 1.8rem;
+      }
+
+      .stat-card p {
+        font-size: 0.85rem;
+      }
+
+      .chart-section {
+        padding: 15px;
+      }
+
+      .chart-container {
+        min-height: 260px;
+      }
+
+      .chart-info h3 {
+        font-size: 1.05rem;
+      }
+
+      .chart-info p {
+        font-size: 0.88rem;
+      }
+
+      th, td {
+        padding: 10px 8px;
+        font-size: 0.85rem;
+      }
+
+      #plotChart {
+        min-height: 280px;
+      }
+
+      .ticker-item {
+        padding: 0 12px;
+        font-size: 0.72rem;
+        gap: 5px;
+      }
+
+      footer {
+        padding: 20px 15px;
+      }
+
+      footer h3 {
+        font-size: 1.1rem;
+      }
+
+      footer p {
+        font-size: 0.8rem;
+      }
+    }
+    @media (max-width: 360px) {
+      .brand-text h1 {
+        font-size: 0.9rem;
+      }
+
+      .brand-icon {
+        width: 34px;
+        height: 34px;
+        font-size: 0.9rem;
+      }
+
+      .startbeg h2 {
+        font-size: 1.15rem;
+      }
+
+      .chart-container {
+        min-height: 240px;
+      }
+
+      #plotChart {
+        min-height: 250px;
+      }
+
+      .ticker-item {
+        padding: 0 10px;
+        font-size: 0.68rem;
+      }
+    }
+    @media (max-width: 900px) and (orientation: landscape) {
+      :root {
+        --header-height: 55px;
+        --ticker-height: 32px;
+      }
+
+      header {
+        padding: 0 12px;
+      }
+
+      .brand-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+      }
+
+      .brand-text h1 {
+        font-size: 1rem;
+      }
+
+      .brand-text p {
+        display: none;
+      }
+
+      .startbeg {
+        padding: 20px 15px;
+      }
+
+      .startbeg h2 {
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+      }
+
+      .startbeg p {
+        font-size: 0.85rem;
+      }
+
+      .container {
+        padding: 15px 12px;
+      }
+
+      .section-title {
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+      }
+
+      .chart-section {
+        padding: 12px;
+        margin-bottom: 15px;
+      }
+
+      .chart-row {
+        gap: 12px;
+      }
+
+      .chart-container {
+        min-height: 220px;
+      }
+
+      .chart-info h3 {
+        font-size: 1rem;
+        margin-bottom: 6px;
+      }
+
+      .chart-info p {
+        font-size: 0.82rem;
+        line-height: 1.6;
+      }
+
+      #plotChart {
+        min-height: 240px;
+      }
+
+      .ticker-item {
+        padding: 0 10px;
+        font-size: 0.7rem;
+      }
+
+      .stats-grid {
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .stat-card {
+        padding: 12px 10px;
+      }
+
+      .stat-card h3 {
+        font-size: 1.2rem;
+      }
+
+      .stat-card i {
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+      }
+
+      .stat-card p {
+        font-size: 0.75rem;
+      }
+
+      footer {
+        padding: 15px;
+        margin-bottom: 8px;
+      }
+
+      footer h3 {
+        font-size: 1rem;
+      }
+
+      footer p {
+        font-size: 0.75rem;
+      }
+    }
+  </style>
 </head>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-<script src="https://www.gstatic.com/charts/loader.js"></script>
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="path/to/jquery.infinitescroll.min.js"></script>
-<body dir="rtl">
+<body>
   <header>
-    <img class="logo" src="picture/logo.png" alt="">
-    <nav>
+    <div class="brand">
+      <div class="brand-icon">
+        <img src="picture/logo.png" alt="شعار">
+      </div>
+      <div class="brand-text">
+        <h1>موقع الاحصاء العلمي</h1>
+        <p>منصة الإحصاءات والبيانات</p>
+      </div>
+    </div>
+    <nav class="desktop-nav">
       <ul>
-        <li><a href="#">الرئيسية</a></li>
+        <li><a href="#home">الرئيسية</a></li>
         <li><a href="#about">حول</a></li>
-        <li><a href="#diagrams">الرسوم البيانية</a></li>
-        <li><a href="#">اتصل</a></li>
+        <li><a href="#stats">الإحصائيات</a></li>
+        <li><a href="#market">الأسواق</a></li>
+        <li><a href="#contact">اتصل بنا</a></li>
       </ul>
     </nav>
+    <button class="hamburger" id="hamburgerBtn" aria-label="القائمة">
+      <i class="fa-solid fa-bars" id="menuIcon"></i>
+    </button>
   </header>
-  <div class="tape-container">
-    <div class="tape" id="productTape">
-      <div class="ltr">
-        <b><span id="green">&nbsp;+0.18% &nbsp;</span> CBU شركة &nbsp;<i class="fa fa-solid fa-caret-up fa-bounce"></i>&nbsp;</b>
-    </div>
-    <div class="ltr">
-        <b><span id="red">&nbsp;-1.47% &nbsp;</span> ماجد للتجارة شركة &nbsp;<i class="fa fa-solid fa-caret-down fa-bounce"></i>&nbsp;</b>
-    </div>
-    <div class="ltr">
-        <b><span id="green">&nbsp;+18.07% &nbsp;</span> غندور للالبسة شركة &nbsp;<i class="fa fa-solid fa-caret-up fa-bounce"></i>&nbsp;</b>
-    </div>
-    <div class="ltr">
-        <b><span id="green">&nbsp;+25.85% &nbsp;</span> ياسر الهندسية شركة &nbsp;<i class="fa fa-solid fa-caret-up fa-bounce"></i>&nbsp;</b>
-    </div>
-    <div class="ltr">
-        <b><span id="red">&nbsp;-11.13% &nbsp;</span> هرمز للمولدات شركة &nbsp;<i class="fa fa-solid fa-caret-down fa-bounce"></i>&nbsp;</b>
-    </div>
-    <div class="ltr">
-        <b><span id="green">&nbsp;+7.14% &nbsp;</span> البنك الرابي &nbsp;<i class="fa fa-solid fa-caret-up fa-bounce"></i>&nbsp;</b>
-    </div>
-    <div class="ltr">
-        <b><span id="equal">&nbsp;2.37% &nbsp;</span> ULK للالبسة شركة &nbsp;<i class="fa fa-solid fa-caret-left " ></i>&nbsp;</b>
-    </div>
-    <div class="ltr">
-        <b><span id="green">&nbsp;+22.18% &nbsp;</span> HBN للمستلزمات الطبية شركة &nbsp;<i class="fa fa-solid fa-caret-up fa-bounce"></i>&nbsp;</b>
-    </div>
-    <div class="ltr">
-        <b><span id="equal-down">&nbsp;0.22% &nbsp;</span> FP شركة &nbsp;<i class="fa fa-solid fa-caret-left "></i>&nbsp;</b>
-    </div>
-    <div class="ltr">
-        <b><span id="red">&nbsp;-1.47% &nbsp;</span> REG شركة &nbsp;<i class="fa fa-solid fa-caret-down fa-bounce"></i>&nbsp;</b>
-    </div>
-    <div class="ltr">
-        <b><span id="green">&nbsp;+1.83% &nbsp;</span> AUD شركة &nbsp;<i class="fa fa-solid fa-caret-up fa-bounce"></i>&nbsp;</b>
-    </div>
-    <div class="ltr">
-        <b><span id="red">&nbsp;-1.47% &nbsp;</span> RTH شركة &nbsp;<i class="fa fa-solid fa-caret-down fa-bounce"></i>&nbsp;</b>
-    </div>
-    
-    </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <ul>
+      <li><a href="#home" class="menu-link"><i class="fa-solid fa-house"></i> الرئيسية</a></li>
+      <li><a href="#about" class="menu-link"><i class="fa-solid fa-circle-info"></i> حول</a></li>
+      <li><a href="#stats" class="menu-link"><i class="fa-solid fa-chart-column"></i> الإحصائيات</a></li>
+      <li><a href="#market" class="menu-link"><i class="fa-solid fa-chart-line"></i> الأسواق</a></li>
+      <li><a href="#contact" class="menu-link"><i class="fa-solid fa-phone"></i> اتصل بنا</a></li>
+    </ul>
   </div>
-  <section id="about">
-    <h2>حول</h2>
-    <p>نحن شركة تقدم لك أحدث الإحصاءات لأمور كثيرة. يمكنك الاستفادة من العديد من الطرق البسيطة لجعل هذا القسم يلمع. يمكنك استخدام الصور أو الرموز لمرافقة المعلومات. يمكنك أيضًا اختيار شكل الفقرة، قوائم نقطية، أو مزيج من كليهما. بالنسبة لمهاراتك، يمكنك حتى إضافة شريط مهارات لتوضيحها بوضوح. يوجد العديد من الطرق البسيطة لجعل هذا القسم يلمع. بالإضافة إلى ذلك، إذا كنت ترغب في الانتهاء من ذلك بسرعة، هناك الكثير من القوالب الرائعة التي ستمكنك من إنشاء قسم "حول" في دقائق.</p>
-    <p>يمكن للعديد من المواقع الاستفادة من قسم "حول" ذو الجودة، مثل السجلات الشخصية، ومواقع الأعمال، وغيرها الكثير.</p>
-</section>
+  <section class="startbeg" id="home">
+    <h2>مرحباً بك في موقع الإحصاء العلمي</h2>
+    <p>منصتك الأولى للإحصاءات الدقيقة والبيانات المالية الحديثة. نقدم لك أحدث الأرقام والتحليلات الاقتصادية بطريقة سهلة وواضحة.</p>
+  </section>
+  <section class="container" id="about">
+    <h2 class="section-title">حول المنصة</h2>
+    <div class="chart-section">
+      <p style="font-size: 1.05rem; line-height: 1.9;">
+        نحن شركة متخصصة في تقديم أحدث الإحصاءات والبيانات الاقتصادية. نساعدك على فهم الأسواق المالية، تتبع أداء الشركات، وتحليل الاتجاهات الاقتصادية العالمية.
+        من خلال رسوم بيانية تفاعلية وجداول بيانات دقيقة، نوفر لك كل ما تحتاجه لاتخاذ قرارات مدروسة.
+      </p>
+    </div>
 
-  <section id="diagrams">
-    <h2>الرسوم البيانية</h2>
-  <div class="bargraph" dir="ltr">
-    <canvas id="bar" style="width:100%;max-width:600px;font-weight:900;"></canvas>
-    <article dir="rtl">يوضح هذا الرسم البياني الدخل المالي للعديد من الشركات. يتم تمثيل كل شركة بشريط في المخطط، ويتم تحديد لون كل شريط وفقًا للشركة المقابلة. يحتوي الرسم البياني على محور أفقي (x) يعرض أسماء الشركات ومحور عمودي (y) يمثل الدخل المالي. عنوان الرسم البياني هو "الدخل المالي من أعلى الشرك %".</article>
-  </div>
-  <div class="circlegraph">
-    <canvas id="circle"  ></canvas>
- <article><b>المخطط الدائري</b> في الرسم البياني المقدم يوضح النسبة المئوية للأموال في البنوك المختلفة. وتحتوي البيانات على تسميات البنوك مثل «بنك الشرق»، و«البنك الرئيسي»، و«بنك الاتحاد»، و«بنك ألف»، و«بنك الهاتف المحمول»، بنسب مقابلة 50%، 35%، 54%، 24%، و10% على التوالي. يتم تمثيل كل بنك بلون مختلف يتم إنشاؤه بشكل عشوائي. نوع المخطط هو "دائري"، وله عنوان يوضح "النسبة المئوية للأموال في كل بنك". يوفر هذا التصوير المرئي اتصالاً فعالاً لتوزيع الأموال عبر البنوك المختلفة، مع تمثيل نسبة كل بنك من إجمالي الأموال بشكل واضح في الرسم البياني الدائري.</article>
-  </div>
-  <div style="clear: both;"></div>
-  <div class="market-container" dir="ltr">
-    <div class="shares-table" dir="rtl">
-      <table >
-        <caption>محركات الاسواق والاسهم</caption>
-        <tr>
-            <th>اسم الشركة</th>
-            <th>اخر سعر</th>
-            <th>التغيير</th>
-            <th>الحجم</th>
-        </tr>
-        <tr>
-            <td>شركة TCP</td>
-            <td>$22.40</td>
-            <td id="red" >-1.75%</td>
-            <td>$17.81 M</td>
-        </tr>
-        <tr>
-            <td>شركة CBU</td>
-            <td>$280.20</td>
-            <td id="green" >+0.18%</td>
-            <td>$4.18 M</td>
-        </tr>
-        <tr>
-          <td>شركة CE</td>
-          <td>$80.50</td>
-          <td id="green" >+7.17%</td>
-          <td>$816.99 K</td>
-      </tr>
-      <tr>
-        <td>شركة BUL</td>
-        <td>$29.06</td>
-        <td id="green" >+0.85%</td>
-        <td>$705.38 K</td>
-    </tr>
-    </table>
-     </div>
-     <div id="shares" ></div>
-   </div>
-   <div class="exams" dir="ltr">
-    <canvas id="donutpie" ></canvas>
-    <article dir="rtl"> رسم بياني لتصوير نسبة الطلاب الناجحين والراسبين في الامتحانات الرسمية لعام 2024. يتكون الرسم البياني من فئتين: "الناجحين" و"الراسبين"، مع قيم بيانات مقابلة تبلغ 1549 و163 على التوالي. عنوان الرسم البياني يشير إلى أنه يمثل نسبة الطلاب الناجحين في الامتحانات الرسم.</article>
-
-   </div>
-    </section>
-  <footer dir="ltr">
-    <p><span class="logo">GE Economy</span> <span class="copyright"><br> Powered By Abdullah Tarhini | All rights served &copy;</span></p>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <i class="fa-solid fa-building-columns"></i>
+        <h3>150+</h3>
+        <p>شركة مُتابعة</p>
+      </div>
+      <div class="stat-card">
+        <i class="fa-solid fa-users"></i>
+        <h3>10K+</h3>
+        <p>مستخدم نشط</p>
+      </div>
+      <div class="stat-card">
+        <i class="fa-solid fa-chart-line"></i>
+        <h3>24/7</h3>
+        <p>تحديثات مباشرة</p>
+      </div>
+      <div class="stat-card">
+        <i class="fa-solid fa-globe"></i>
+        <h3>45+</h3>
+        <p>دولة مُغطاة</p>
+      </div>
+    </div>
+  </section>
+  <section class="container" id="stats">
+    <h2 class="section-title">الرسوم البيانية</h2>
+    <div class="chart-section">
+      <div class="chart-row">
+        <div class="chart-container">
+          <canvas id="barChart"></canvas>
+        </div>
+        <div class="chart-info">
+          <h3>الدخل المالي لأهم الشركات</h3>
+          <p>يوضح هذا المخطط البياني الدخل المالي السنوي لمجموعة من الشركات الرائدة. يتم تمثيل كل شركة بشريط بلون مختلف، حيث يعرض المحور الأفقي أسماء الشركات والمحور العمودي يمثل الدخل المالي بالملايين.</p>
+        </div>
+      </div>
+    </div>
+    <div class="chart-section">
+      <div class="chart-row">
+        <div class="chart-info">
+          <h3>توزيع الأموال في البنوك</h3>
+          <p>المخطط الدائري يوضح النسبة المئوية للأموال المودعة في البنوك المختلفة. يتم تحديث البيانات بشكل دوري لتعكس أحدث الأرقام. كل بنك يتم تمثيله بلون مختلف لسهولة المقارنة.</p>
+        </div>
+        <div class="chart-container">
+          <canvas id="pieChart"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="chart-section">
+      <div class="chart-row">
+        <div class="chart-container">
+          <canvas id="donutChart"></canvas>
+        </div>
+        <div class="chart-info">
+          <h3>نتائج الامتحانات الرسمية 2024</h3>
+          <p>رسم بياني يوضح نسبة الطلاب الناجحين مقابل الراسبين في الامتحانات الرسمية لعام 2024. يظهر أن نسبة النجاح مرتفعة حيث بلغت 90.5% من إجمالي المتقدمين.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="container" id="market">
+    <h2 class="section-title">الأسواق والأسهم</h2>
+    <div class="market-section">
+      <div class="table-wrapper">
+        <h3><i class="fa-solid fa-table"></i> محركات الأسواق</h3>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>الشركة</th>
+                <th>السعر</th>
+                <th>التغيير</th>
+                <th>الحجم</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>شركة TCP</td>
+                <td>$22.40</td>
+                <td class="down">-1.75%</td>
+                <td>$17.81 M</td>
+              </tr>
+              <tr>
+                <td>شركة CBU</td>
+                <td>$280.20</td>
+                <td class="up">+0.18%</td>
+                <td>$4.18 M</td>
+              </tr>
+              <tr>
+                <td>شركة CE</td>
+                <td>$80.50</td>
+                <td class="up">+7.17%</td>
+                <td>$816.99 K</td>
+              </tr>
+              <tr>
+                <td>شركة BUL</td>
+                <td>$29.06</td>
+                <td class="up">+0.85%</td>
+                <td>$705.38 K</td>
+              </tr>
+              <tr>
+                <td>شركة XYZ</td>
+                <td>$145.30</td>
+                <td class="down">-2.45%</td>
+                <td>$1.25 M</td>
+              </tr>
+              <tr>
+                <td>شركة ABC</td>
+                <td>$67.80</td>
+                <td class="neutral">0.00%</td>
+                <td>$920 K</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div id="plotChart"></div>
+    </div>
+  </section>
+  <footer id="contact">
+    <h3>موقع الاحصاء العلمي</h3>
+    <p>Powered By Abdullah Tarhini | All rights reserved &copy; 2025</p>
+    <p style="margin-top: 10px;">📧 contact@geeconomy.com | 📞 +961 1 234 567</p>
   </footer>
-  <script> //for the bar graph
-    const xValues = ["شركة المطار الدولية", "شركات النفط والغاز", "شركة الكهرباء", "شركة الماء", "شركة البنى التحتية للقطرات"];
-    const yValues = [70, 80, 54, 20, 15];
-    const barColors = ["red", "green","blue","orange","brown"];
-    
-    new Chart("bar", {
-      type: "bar",
+  <div class="ticker">
+    <div class="ticker-track" id="tickerTrack">
+      <div class="ticker-item"><span class="up">▲ +0.18%</span> CBU شركة</div>
+      <div class="ticker-item"><span class="down">▼ -1.47%</span> ماجد للتجارة</div>
+      <div class="ticker-item"><span class="up">▲ +18.07%</span> غندور للألبسة</div>
+      <div class="ticker-item"><span class="up">▲ +25.85%</span> ياسر الهندسية</div>
+      <div class="ticker-item"><span class="down">▼ -11.13%</span> هرمز للمولدات</div>
+      <div class="ticker-item"><span class="up">▲ +7.14%</span> البنك العربي</div>
+      <div class="ticker-item"><span class="neutral">◆ 2.37%</span> ULK للألبسة</div>
+      <div class="ticker-item"><span class="up">▲ +22.18%</span> HBN الطبية</div>
+      <div class="ticker-item"><span class="neutral">◆ 0.22%</span> FP شركة</div>
+      <div class="ticker-item"><span class="down">▼ -1.47%</span> REG شركة</div>
+      <div class="ticker-item"><span class="up">▲ +1.83%</span> AUD شركة</div>
+      <div class="ticker-item"><span class="up">▲ +0.18%</span> CBU شركة</div>
+      <div class="ticker-item"><span class="down">▼ -1.47%</span> ماجد للتجارة</div>
+      <div class="ticker-item"><span class="up">▲ +18.07%</span> غندور للألبسة</div>
+      <div class="ticker-item"><span class="up">▲ +25.85%</span> ياسر الهندسية</div>
+      <div class="ticker-item"><span class="down">▼ -11.13%</span> هرمز للمولدات</div>
+      <div class="ticker-item"><span class="up">▲ +7.14%</span> البنك العربي</div>
+      <div class="ticker-item"><span class="neutral">◆ 2.37%</span> ULK للألبسة</div>
+      <div class="ticker-item"><span class="up">▲ +22.18%</span> HBN الطبية</div>
+      <div class="ticker-item"><span class="neutral">◆ 0.22%</span> FP شركة</div>
+      <div class="ticker-item"><span class="down">▼ -1.47%</span> REG شركة</div>
+      <div class="ticker-item"><span class="up">▲ +1.83%</span> AUD شركة</div>
+      <div class="ticker-item"><span class="down">▼ -1.47%</span> RTH شركة</div>
+    </div>
+  </div>
+
+  <script>
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuIcon = document.getElementById('menuIcon');
+    hamburgerBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      mobileMenu.classList.toggle('active');
+      menuIcon.className = mobileMenu.classList.contains('active') 
+        ? 'fa-solid fa-xmark' 
+        : 'fa-solid fa-bars';
+    });
+    document.querySelectorAll('.menu-link').forEach(function(link) {
+      link.addEventListener('click', function() {
+        mobileMenu.classList.remove('active');
+        menuIcon.className = 'fa-solid fa-bars';
+      });
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!mobileMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+        mobileMenu.classList.remove('active');
+        menuIcon.className = 'fa-solid fa-bars';
+      }
+    });
+    window.addEventListener('resize', function() {
+      Object.values(Chart.instances).forEach(function(chart) {
+        chart.resize();
+      });
+    });
+    const barChart = new Chart(document.getElementById('barChart'), {
+      type: 'bar',
       data: {
-        labels: xValues,
+        labels: ["شركة المطار", "النفط والغاز", "الكهرباء", "الماء", "البنى التحتية"],
         datasets: [{
-          backgroundColor: barColors,
-          data: yValues
+          label: 'الدخل (مليون $)',
+          data: [70, 80, 54, 20, 15],
+          backgroundColor: ['#e74c3c', '#27ae60', '#3498db', '#f39c12', '#8b4513'],
+          borderRadius: 6
         }]
       },
       options: {
-        legend: {display: false},
-        title: {
-          display: true,
-         text: 'الدخل المالي من أهم الشرك %'
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          title: {
+            display: true,
+            text: 'الدخل المالي لأهم الشركات',
+            font: { size: 14 }
+          }
+        },
+        scales: {
+          y: { beginAtZero: true }
         }
       }
     });
-    </script>
-    <script> //circle graph
-      function getRandomColor() {
-        const r = Math.floor(Math.random() * 256);
-        const g = Math.floor(Math.random() * 256);
-        const b = Math.floor(Math.random() * 256);
-        return `rgb(${r}, ${g}, ${b})`;
+    function getRandomColor() {
+      const r = Math.floor(Math.random() * 200);
+      const g = Math.floor(Math.random() * 200);
+      const b = Math.floor(Math.random() * 200);
+      return `rgb(${r}, ${g}, ${b})`;
     }
-      // Define the initial data and chart using Chart.js
-const circlegraph = document.getElementById('circle').getContext('2d');
-const myChart = new Chart(circlegraph, {
-    type: 'pie',
-    data: {
-        labels: ['بنك الشرق', 'بنك الرايسي', 'بنك الاتحاد', 'بنك الالف', 'بنك المتحرك'],
-        datasets: [{
-            label: 'نسبة المال في كل بنك',
-            data: [50, 35, 54, 24, 10],
-            backgroundColor: [
-                getRandomColor(),
-                getRandomColor(),
-                getRandomColor(),
-                getRandomColor(),
-                getRandomColor()
-            ]
-        }]
-    },
-    options: {
-        title: {
-            display: true,
-            text: 'نسبة المال في كل بنك'
-        }
-    }
-});
 
-// Function to update the chart with new random percentage values
-function updateChartValues() {
-    // Generate new random percentage values
-    const newData = [
+    const pieChart = new Chart(document.getElementById('pieChart'), {
+      type: 'pie',
+      data: {
+        labels: ['بنك الشرق', 'البنك الرئيسي', 'بنك الاتحاد', 'بنك الألف', 'بنك المتحرك'],
+        datasets: [{
+          data: [50, 35, 54, 24, 10],
+          backgroundColor: [
+            getRandomColor(), getRandomColor(), getRandomColor(),
+            getRandomColor(), getRandomColor()
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: true,
+            text: 'نسبة الأموال في كل بنك',
+            font: { size: 14 }
+          },
+          legend: { position: 'bottom' }
+        }
+      }
+    });
+
+    setInterval(function() {
+      pieChart.data.datasets[0].data = [
         Math.floor(Math.random() * 100),
         Math.floor(Math.random() * 100),
         Math.floor(Math.random() * 100),
         Math.floor(Math.random() * 100),
         Math.floor(Math.random() * 100)
-    ];
-
-    // Update the chart with the new data
-    myChart.data.datasets[0].data = newData;
-    myChart.update();
-}
-
-// Set up the interval for auto-changing the percentage values
-setInterval(updateChartValues, 3000); // Update the chart values every 3 seconds
-
-      </script>
-      <script>
-        const xArray = ["الناجحين","الراسبين"];
-        const yArray = [1549,163];
-        const data = {
-          labels: xArray,
-          datasets: [{
-            data: yArray,
-            backgroundColor:[
-            "green","red"
-            ]
-          }]
-        };
-      
-        const options = {
+      ];
+      pieChart.update();
+    }, 3000);
+    const donutChart = new Chart(document.getElementById('donutChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['الناجحون', 'الراسبون'],
+        datasets: [{
+          data: [1549, 163],
+          backgroundColor: ['#27ae60', '#e74c3c'],
+          borderWidth: 2,
+          borderColor: '#fff'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '55%',
+        plugins: {
           title: {
             display: true,
-            text: 'نسبة الطلاب الناحين في الامتحنات الرسمية لسنة 2024'
+            text: 'نتائج الامتحانات الرسمية 2024',
+            font: { size: 14 }
           },
-          cutoutPercentage: 40,
-          plugins: {
-            datalabels: {
-              formatter: (value, ctx) => {
-                let sum = 0;
-                let dataArr = ctx.chart.data.datasets[0].data;
-                dataArr.map(data => {
-                  sum += data;
-                });
-                let percentage = (value*100 / sum).toFixed(2)+"%";
-                return percentage;
-              },
-              color: '#fff'
-            }
-          }
-        };
-      
-        const piegraph = document.getElementById('donutpie').getContext('2d');
-        const myDonutChart = new Chart(piegraph, {
-          type: 'doughnut',
-          data: data,
-          options: options
-        });
-      </script>
-      <script>
-        const m = ["jan", "Feb", "march", "apr", "may","jun","july","aug","sep","oct","nov","dec"];
-                const p = [55, 49, 44, 34, 15,60,55,77,25,39,44,22];
-                const p2 = [10, 92, 20, 57, 81, 23, 99, 39, 27, 47, 84, 10];
-                const p3 = [36, 68, 47, 53, 29, 45, 24, 21, 87, 51, 46, 64.5];
-                const averageP = p.reduce((a, b) => a + b) ;
-        const averageP2 = p2.reduce((a, b) => a + b) ;
-        const averageP3 = p3.reduce((a, b) => a + b) ;
-        
-        const averageOfAllP = (averageP + averageP2 + averageP3) / 3;
-        
-        // Define Data
-        const plotdata = [{
-                  x: m,
-                  y: p,
-                  mode: "lines",
-                  name: "البنك الرابي",
-                  marker: {color: "rgba(0,0,255,0.6)"}
-                }, {
-                  x: m,
-                  y: p2,
-                  mode: "lines",
-                  name: "شركة TCP",
-                  marker: {color: "rgb(163, 51, 51)"}
-                  
-                },{
-                  x: m,
-                  y: p3,
-                  mode: "lines",
-                  name: "شركة CBU",
-                  marker: {color: "rgb(213, 222, 40)"}
-                },{
-                  x: m,
-                  y: averageOfAllP ,
-                  mode: "markers",
-                  name: "Avarage of all ",
-                  marker: {color: "rgb(98, 29, 29)"}
-                }];
-        
-        // Define Layout
-        const layout = {title: "الاسواق المحلية"};
-        
-        // Display using Plotly
-        Plotly.newPlot("shares", plotdata, layout);
-        </script>
+          legend: { position: 'bottom' }
+        }
+      }
+    });
+    const months = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", 
+                    "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+    const bank1 = [55, 49, 44, 34, 15, 60, 55, 77, 25, 39, 44, 22];
+    const bank2 = [10, 92, 20, 57, 81, 23, 99, 39, 27, 47, 84, 10];
+    const bank3 = [36, 68, 47, 53, 29, 45, 24, 21, 87, 51, 46, 64.5];
+
+    const plotData = [
+      {
+        x: months, y: bank1,
+        type: 'scatter', mode: 'lines+markers',
+        name: 'البنك العربي',
+        line: { color: '#3498db', width: 3, shape: 'spline' },
+        marker: { size: 6 }
+      },
+      {
+        x: months, y: bank2,
+        type: 'scatter', mode: 'lines+markers',
+        name: 'شركة TCP',
+        line: { color: '#e74c3c', width: 3, shape: 'spline' },
+        marker: { size: 6 }
+      },
+      {
+        x: months, y: bank3,
+        type: 'scatter', mode: 'lines+markers',
+        name: 'شركة CBU',
+        line: { color: '#f39c12', width: 3, shape: 'spline' },
+        marker: { size: 6 }
+      }
+    ];
+
+    const plotLayout = {
+      title: {
+        text: 'أداء الأسواق المحلية خلال السنة',
+        font: { size: 15 }
+      },
+      xaxis: {
+        title: 'الشهر',
+        tickangle: -45
+      },
+      yaxis: {
+        title: 'القيمة'
+      },
+      legend: {
+        orientation: 'h',
+        y: -0.25,
+        x: 0.5,
+        xanchor: 'center',
+        font: { size: 11 }
+      },
+      margin: { t: 50, r: 20, b: 80, l: 60 },
+      hovermode: 'closest',
+      autosize: true
+    };
+    const plotConfig = {
+      responsive: true,
+      displayModeBar: false,
+      scrollZoom: false,
+      locale: 'ar'
+    };
+    Plotly.newPlot('plotChart', plotData, plotLayout, plotConfig);
+    let resizeTimeout;
+    function handlePlotlyResize() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(function() {
+        const plotDiv = document.getElementById('plotChart');
+        if (plotDiv && plotDiv.data) {
+          Plotly.Plots.resize(plotDiv);
+        }
+      }, 200);
+    }
+    window.addEventListener('resize', handlePlotlyResize);
+    window.addEventListener('orientationchange', function() {
+      setTimeout(handlePlotlyResize, 300);
+    });
+    if (typeof ResizeObserver !== 'undefined') {
+      const plotDiv = document.getElementById('plotChart');
+      const plotObserver = new ResizeObserver(function() {
+        handlePlotlyResize();
+      });
+      plotObserver.observe(plotDiv);
+    }
+  </script>
 
 </body>
 </html>
