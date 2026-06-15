@@ -115,7 +115,7 @@
       background: var(--primary);
       color: white;
     }
-    .hamburger {
+    .togglenavbtn {
       display: none;
       background: none;
       border: none;
@@ -130,7 +130,7 @@
       align-items: center;
       justify-content: center;
     }
-    .hamburger:hover {
+    .togglenavbtn:hover {
       background: rgba(0,0,128,0.1);
     }
     .mobile-menu {
@@ -330,7 +330,7 @@
     .down { color: red; font-weight: bold; }
     .neutral { color: orange; font-weight: bold; }
 
-    #plotChart {
+    #plotchart {
       background: var(--card);
       border-radius: 12px;
       box-shadow: var(--shadow);
@@ -438,7 +438,7 @@
         display: none;
       }
 
-      .hamburger {
+      .togglenavbtn {
         display: flex;
       }
 
@@ -475,7 +475,7 @@
         max-width: 100%;
       }
 
-      #plotChart {
+      #plotchart {
         min-height: 320px;
       }
 
@@ -525,7 +525,7 @@
         font-size: 1rem;
       }
 
-      .hamburger {
+      .togglenavbtn {
         width: 40px;
         height: 40px;
         font-size: 1.4rem;
@@ -589,7 +589,7 @@
         font-size: 0.85rem;
       }
 
-      #plotChart {
+      #plotchart {
         min-height: 280px;
       }
 
@@ -630,7 +630,7 @@
         min-height: 240px;
       }
 
-      #plotChart {
+      #plotchart {
         min-height: 250px;
       }
 
@@ -708,7 +708,7 @@
         line-height: 1.6;
       }
 
-      #plotChart {
+      #plotchart {
         min-height: 240px;
       }
 
@@ -774,11 +774,11 @@
         <li><a href="#contact">اتصل بنا</a></li>
       </ul>
     </nav>
-    <button class="hamburger" id="hamburgerBtn" aria-label="القائمة">
-      <i class="fa-solid fa-bars" id="menuIcon"></i>
+    <button class="togglenavbtn" id="togglenavbtn" aria-label="القائمة">
+      <i class="fa-solid fa-bars" id="menuicon"></i>
     </button>
   </header>
-  <div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu" id="mobmenu">
     <ul>
       <li><a href="#home" class="menu-link"><i class="fa-solid fa-house"></i> الرئيسية</a></li>
       <li><a href="#about" class="menu-link"><i class="fa-solid fa-circle-info"></i> حول</a></li>
@@ -828,7 +828,7 @@
     <div class="chart-section">
       <div class="chart-row">
         <div class="chart-container">
-          <canvas id="barChart"></canvas>
+          <canvas id="barchart"></canvas>
         </div>
         <div class="chart-info">
           <h3>الدخل المالي لأهم الشركات</h3>
@@ -843,14 +843,14 @@
           <p>المخطط الدائري يوضح النسبة المئوية للأموال المودعة في البنوك المختلفة. يتم تحديث البيانات بشكل دوري لتعكس أحدث الأرقام. كل بنك يتم تمثيله بلون مختلف لسهولة المقارنة.</p>
         </div>
         <div class="chart-container">
-          <canvas id="pieChart"></canvas>
+          <canvas id="piechart"></canvas>
         </div>
       </div>
     </div>
     <div class="chart-section">
       <div class="chart-row">
         <div class="chart-container">
-          <canvas id="donutChart"></canvas>
+          <canvas id="donutchart"></canvas>
         </div>
         <div class="chart-info">
           <h3>نتائج الامتحانات الرسمية 2024</h3>
@@ -915,7 +915,7 @@
           </table>
         </div>
       </div>
-      <div id="plotChart"></div>
+      <div id="plotchart"></div>
     </div>
   </section>
   <footer id="contact">
@@ -952,35 +952,35 @@
   </div>
 
   <script>
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const menuIcon = document.getElementById('menuIcon');
-    hamburgerBtn.addEventListener('click', function(e) {
+    const togglenavbtn = document.getElementById('togglenavbtn');
+    const mobmenu = document.getElementById('mobmenu');
+    const menuicon = document.getElementById('menuicon');
+    togglenavbtn.addEventListener('click', function(e) {
       e.stopPropagation();
-      mobileMenu.classList.toggle('active');
-      menuIcon.className = mobileMenu.classList.contains('active') 
+      mobmenu.classList.toggle('active');
+      menuicon.className = mobmenu.classList.contains('active') 
         ? 'fa-solid fa-xmark' 
         : 'fa-solid fa-bars';
     });
     document.querySelectorAll('.menu-link').forEach(function(link) {
       link.addEventListener('click', function() {
-        mobileMenu.classList.remove('active');
-        menuIcon.className = 'fa-solid fa-bars';
+        mobmenu.classList.remove('active');
+        menuicon.className = 'fa-solid fa-bars';
       });
     });
 
     document.addEventListener('click', function(e) {
-      if (!mobileMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
-        mobileMenu.classList.remove('active');
-        menuIcon.className = 'fa-solid fa-bars';
+      if (!mobmenu.contains(e.target) && !togglenavbtn.contains(e.target)) {
+        mobmenu.classList.remove('active');
+        menuicon.className = 'fa-solid fa-bars';
       }
     });
     window.addEventListener('resize', function() {
-      Object.values(Chart.instances).forEach(function(chart) {
+      Object.values(chart.instances).forEach(function(chart) {
         chart.resize();
       });
     });
-    const barChart = new Chart(document.getElementById('barChart'), {
+    const barchart = new chart(document.getElementById('barchart'), {
       type: 'bar',
       data: {
         labels: ["شركة المطار", "النفط والغاز", "الكهرباء", "الماء", "البنى التحتية"],
@@ -1007,22 +1007,22 @@
         }
       }
     });
-    function getRandomColor() {
+    function getrandomclr() {
       const r = Math.floor(Math.random() * 200);
       const g = Math.floor(Math.random() * 200);
       const b = Math.floor(Math.random() * 200);
       return `rgb(${r}, ${g}, ${b})`;
     }
 
-    const pieChart = new Chart(document.getElementById('pieChart'), {
+    const piechart = new chart(document.getElementById('piechart'), {
       type: 'pie',
       data: {
         labels: ['بنك الشرق', 'البنك الرئيسي', 'بنك الاتحاد', 'بنك الألف', 'بنك المتحرك'],
         datasets: [{
           data: [50, 35, 54, 24, 10],
           backgroundColor: [
-            getRandomColor(), getRandomColor(), getRandomColor(),
-            getRandomColor(), getRandomColor()
+            getrandomclr(), getrandomclr(), getrandomclr(),
+            getrandomclr(), getrandomclr()
           ]
         }]
       },
@@ -1041,16 +1041,16 @@
     });
 
     setInterval(function() {
-      pieChart.data.datasets[0].data = [
+      piechart.data.datasets[0].data = [
         Math.floor(Math.random() * 100),
         Math.floor(Math.random() * 100),
         Math.floor(Math.random() * 100),
         Math.floor(Math.random() * 100),
         Math.floor(Math.random() * 100)
       ];
-      pieChart.update();
+      piechart.update();
     }, 3000);
-    const donutChart = new Chart(document.getElementById('donutChart'), {
+    const donutchart = new chart(document.getElementById('donutchart'), {
       type: 'doughnut',
       data: {
         labels: ['الناجحون', 'الراسبون'],
@@ -1128,33 +1128,33 @@
       hovermode: 'closest',
       autosize: true
     };
-    const plotConfig = {
+    const plotconfig = {
       responsive: true,
       displayModeBar: false,
       scrollZoom: false,
       locale: 'ar'
     };
-    Plotly.newPlot('plotChart', plotData, plotLayout, plotConfig);
-    let resizeTimeout;
-    function handlePlotlyResize() {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(function() {
-        const plotDiv = document.getElementById('plotChart');
-        if (plotDiv && plotDiv.data) {
-          Plotly.Plots.resize(plotDiv);
+    Plotly.newPlot('plotchart', plotData, plotLayout, plotconfig);
+    let resizetimeout;
+    function handleplotyresize() {
+      clstimeout(resizetimeout);
+      resizetimeout = setTimeout(function() {
+        const plotdiv = document.getElementById('plotchart');
+        if (plotdiv && plotdiv.data) {
+          Plotly.Plots.resize(plotdiv);
         }
       }, 200);
     }
-    window.addEventListener('resize', handlePlotlyResize);
+    window.addEventListener('resize', handleplotyresize);
     window.addEventListener('orientationchange', function() {
-      setTimeout(handlePlotlyResize, 300);
+      setTimeout(handleplotyresize, 300);
     });
     if (typeof ResizeObserver !== 'undefined') {
-      const plotDiv = document.getElementById('plotChart');
-      const plotObserver = new ResizeObserver(function() {
-        handlePlotlyResize();
+      const plotdiv = document.getElementById('plotchart');
+      const plotobserver = new ResizeObserver(function() {
+        handleplotyresize();
       });
-      plotObserver.observe(plotDiv);
+      plotobserver.observe(plotdiv);
     }
   </script>
 
