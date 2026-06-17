@@ -950,213 +950,224 @@
       <div class="ticker-item"><span class="down">▼ -1.47%</span> RTH شركة</div>
     </div>
   </div>
+<script>
+  const togglenavbtn = document.getElementById('togglenavbtn');
+  const mobmenu = document.getElementById('mobmenu');
+  const menuicon = document.getElementById('menuicon');
 
-  <script>
-    const togglenavbtn = document.getElementById('togglenavbtn');
-    const mobmenu = document.getElementById('mobmenu');
-    const menuicon = document.getElementById('menuicon');
-    togglenavbtn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      mobmenu.classList.toggle('active');
-      menuicon.className = mobmenu.classList.contains('active') 
-        ? 'fa-solid fa-xmark' 
-        : 'fa-solid fa-bars';
-    });
-    document.querySelectorAll('.menu-link').forEach(function(link) {
-      link.addEventListener('click', function() {
-        mobmenu.classList.remove('active');
-        menuicon.className = 'fa-solid fa-bars';
-      });
-    });
+  togglenavbtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    mobmenu.classList.toggle('active');
+    menuicon.className = mobmenu.classList.contains('active') 
+      ? 'fa-solid fa-xmark' 
+      : 'fa-solid fa-bars';
+  });
 
-    document.addEventListener('click', function(e) {
-      if (!mobmenu.contains(e.target) && !togglenavbtn.contains(e.target)) {
-        mobmenu.classList.remove('active');
-        menuicon.className = 'fa-solid fa-bars';
-      }
+  document.querySelectorAll('.menu-link').forEach(function(link) {
+    link.addEventListener('click', function() {
+      mobmenu.classList.remove('active');
+      menuicon.className = 'fa-solid fa-bars';
     });
-    window.addEventListener('resize', function() {
-      Object.values(chart.instances).forEach(function(chart) {
-        chart.resize();
-      });
-    });
-    const barchart = new chart(document.getElementById('barchart'), {
-      type: 'bar',
-      data: {
-        labels: ["شركة المطار", "النفط والغاز", "الكهرباء", "الماء", "البنى التحتية"],
-        datasets: [{
-          label: 'الدخل (مليون $)',
-          data: [70, 80, 54, 20, 15],
-          backgroundColor: ['#e74c3c', '#27ae60', '#3498db', '#f39c12', '#8b4513'],
-          borderRadius: 6
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          title: {
-            display: true,
-            text: 'الدخل المالي لأهم الشركات',
-            font: { size: 14 }
-          }
-        },
-        scales: {
-          y: { beginAtZero: true }
-        }
-      }
-    });
-    function getrandomclr() {
-      const r = Math.floor(Math.random() * 200);
-      const g = Math.floor(Math.random() * 200);
-      const b = Math.floor(Math.random() * 200);
-      return `rgb(${r}, ${g}, ${b})`;
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!mobmenu.contains(e.target) && !togglenavbtn.contains(e.target)) {
+      mobmenu.classList.remove('active');
+      menuicon.className = 'fa-solid fa-bars';
     }
+  });
 
-    const piechart = new chart(document.getElementById('piechart'), {
-      type: 'pie',
-      data: {
-        labels: ['بنك الشرق', 'البنك الرئيسي', 'بنك الاتحاد', 'بنك الألف', 'بنك المتحرك'],
-        datasets: [{
-          data: [50, 35, 54, 24, 10],
-          backgroundColor: [
-            getrandomclr(), getrandomclr(), getrandomclr(),
-            getrandomclr(), getrandomclr()
-          ]
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          title: {
-            display: true,
-            text: 'نسبة الأموال في كل بنك',
-            font: { size: 14 }
-          },
-          legend: { position: 'bottom' }
-        }
-      }
+  window.addEventListener('resize', function() {
+    Object.values(Chart.instances).forEach(function(chart) {
+      chart.resize();
     });
+  });
 
-    setInterval(function() {
-      piechart.data.datasets[0].data = [
-        Math.floor(Math.random() * 100),
-        Math.floor(Math.random() * 100),
-        Math.floor(Math.random() * 100),
-        Math.floor(Math.random() * 100),
-        Math.floor(Math.random() * 100)
-      ];
-      piechart.update();
-    }, 3000);
-    const donutchart = new chart(document.getElementById('donutchart'), {
-      type: 'doughnut',
-      data: {
-        labels: ['الناجحون', 'الراسبون'],
-        datasets: [{
-          data: [1549, 163],
-          backgroundColor: ['#27ae60', '#e74c3c'],
-          borderWidth: 2,
-          borderColor: '#fff'
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        cutout: '55%',
-        plugins: {
-          title: {
-            display: true,
-            text: 'نتائج الامتحانات الرسمية 2024',
-            font: { size: 14 }
-          },
-          legend: { position: 'bottom' }
-        }
-      }
-    });
-    const months = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", 
-                    "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
-    const bank1 = [55, 49, 44, 34, 15, 60, 55, 77, 25, 39, 44, 22];
-    const bank2 = [10, 92, 20, 57, 81, 23, 99, 39, 27, 47, 84, 10];
-    const bank3 = [36, 68, 47, 53, 29, 45, 24, 21, 87, 51, 46, 64.5];
-
-    const plotData = [
-      {
-        x: months, y: bank1,
-        type: 'scatter', mode: 'lines+markers',
-        name: 'البنك العربي',
-        line: { color: '#3498db', width: 3, shape: 'spline' },
-        marker: { size: 6 }
-      },
-      {
-        x: months, y: bank2,
-        type: 'scatter', mode: 'lines+markers',
-        name: 'شركة TCP',
-        line: { color: '#e74c3c', width: 3, shape: 'spline' },
-        marker: { size: 6 }
-      },
-      {
-        x: months, y: bank3,
-        type: 'scatter', mode: 'lines+markers',
-        name: 'شركة CBU',
-        line: { color: '#f39c12', width: 3, shape: 'spline' },
-        marker: { size: 6 }
-      }
-    ];
-
-    const plotLayout = {
-      title: {
-        text: 'أداء الأسواق المحلية خلال السنة',
-        font: { size: 15 }
-      },
-      xaxis: {
-        title: 'الشهر',
-        tickangle: -45
-      },
-      yaxis: {
-        title: 'القيمة'
-      },
-      legend: {
-        orientation: 'h',
-        y: -0.25,
-        x: 0.5,
-        xanchor: 'center',
-        font: { size: 11 }
-      },
-      margin: { t: 50, r: 20, b: 80, l: 60 },
-      hovermode: 'closest',
-      autosize: true
-    };
-    const plotconfig = {
+  const barchart = new Chart(document.getElementById('barchart'), {
+    type: 'bar',
+    data: {
+      labels: ["شركة المطار", "النفط والغاز", "الكهرباء", "الماء", "البنى التحتية"],
+      datasets: [{
+        label: 'الدخل (مليون $)',
+        data: [70, 80, 54, 20, 15],
+        backgroundColor: ['#e74c3c', '#27ae60', '#3498db', '#f39c12', '#8b4513'],
+        borderRadius: 6
+      }]
+    },
+    options: {
       responsive: true,
-      displayModeBar: false,
-      scrollZoom: false,
-      locale: 'ar'
-    };
-    Plotly.newPlot('plotchart', plotData, plotLayout, plotconfig);
-    let resizetimeout;
-    function handleplotyresize() {
-      clstimeout(resizetimeout);
-      resizetimeout = setTimeout(function() {
-        const plotdiv = document.getElementById('plotchart');
-        if (plotdiv && plotdiv.data) {
-          Plotly.Plots.resize(plotdiv);
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: 'الدخل المالي لأهم الشركات',
+          font: { size: 14 }
         }
-      }, 200);
+      },
+      scales: {
+        y: { beginAtZero: true }
+      }
     }
-    window.addEventListener('resize', handleplotyresize);
-    window.addEventListener('orientationchange', function() {
-      setTimeout(handleplotyresize, 300);
-    });
-    if (typeof ResizeObserver !== 'undefined') {
+  });
+
+  function getrandomclr() {
+    const r = Math.floor(Math.random() * 200);
+    const g = Math.floor(Math.random() * 200);
+    const b = Math.floor(Math.random() * 200);
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+
+  const piechart = new Chart(document.getElementById('piechart'), {
+    type: 'pie',
+    data: {
+      labels: ['بنك الشرق', 'البنك الرئيسي', 'بنك الاتحاد', 'بنك الألف', 'بنك المتحرك'],
+      datasets: [{
+        data: [50, 35, 54, 24, 10],
+        backgroundColor: [
+          getrandomclr(), getrandomclr(), getrandomclr(),
+          getrandomclr(), getrandomclr()
+        ]
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        title: {
+          display: true,
+          text: 'نسبة الأموال في كل بنك',
+          font: { size: 14 }
+        },
+        legend: { position: 'bottom' }
+      }
+    }
+  });
+
+  setInterval(function() {
+    piechart.data.datasets[0].data = [
+      Math.floor(Math.random() * 100),
+      Math.floor(Math.random() * 100),
+      Math.floor(Math.random() * 100),
+      Math.floor(Math.random() * 100),
+      Math.floor(Math.random() * 100)
+    ];
+    piechart.update();
+  }, 3000);
+
+  const donutchart = new Chart(document.getElementById('donutchart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['الناجحون', 'الراسبون'],
+      datasets: [{
+        data: [1549, 163],
+        backgroundColor: ['#27ae60', '#e74c3c'],
+        borderWidth: 2,
+        borderColor: '#fff'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '55%',
+      plugins: {
+        title: {
+          display: true,
+          text: 'نتائج الامتحانات الرسمية 2024',
+          font: { size: 14 }
+        },
+        legend: { position: 'bottom' }
+      }
+    }
+  });
+
+  const months = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", 
+                  "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+  const bank1 = [55, 49, 44, 34, 15, 60, 55, 77, 25, 39, 44, 22];
+  const bank2 = [10, 92, 20, 57, 81, 23, 99, 39, 27, 47, 84, 10];
+  const bank3 = [36, 68, 47, 53, 29, 45, 24, 21, 87, 51, 46, 64.5];
+
+  const plotData = [
+    {
+      x: months, y: bank1,
+      type: 'scatter', mode: 'lines+markers',
+      name: 'البنك العربي',
+      line: { color: '#3498db', width: 3, shape: 'spline' },
+      marker: { size: 6 }
+    },
+    {
+      x: months, y: bank2,
+      type: 'scatter', mode: 'lines+markers',
+      name: 'شركة TCP',
+      line: { color: '#e74c3c', width: 3, shape: 'spline' },
+      marker: { size: 6 }
+    },
+    {
+      x: months, y: bank3,
+      type: 'scatter', mode: 'lines+markers',
+      name: 'شركة CBU',
+      line: { color: '#f39c12', width: 3, shape: 'spline' },
+      marker: { size: 6 }
+    }
+  ];
+
+  const plotLayout = {
+    title: {
+      text: 'أداء الأسواق المحلية خلال السنة',
+      font: { size: 15 }
+    },
+    xaxis: {
+      title: 'الشهر',
+      tickangle: -45
+    },
+    yaxis: {
+      title: 'القيمة'
+    },
+    legend: {
+      orientation: 'h',
+      y: -0.25,
+      x: 0.5,
+      xanchor: 'center',
+      font: { size: 11 }
+    },
+    margin: { t: 50, r: 20, b: 80, l: 60 },
+    hovermode: 'closest',
+    autosize: true
+  };
+
+  const plotconfig = {
+    responsive: true,
+    displayModeBar: false,
+    scrollZoom: false,
+    locale: 'ar'
+  };
+
+  Plotly.newPlot('plotchart', plotData, plotLayout, plotconfig);
+
+  let resizetimeout;
+  function handleplotyresize() {
+    clearTimeout(resizetimeout);
+    resizetimeout = setTimeout(function() {
       const plotdiv = document.getElementById('plotchart');
-      const plotobserver = new ResizeObserver(function() {
-        handleplotyresize();
-      });
-      plotobserver.observe(plotdiv);
-    }
-  </script>
+      if (plotdiv && plotdiv.data) {
+        Plotly.Plots.resize(plotdiv);
+      }
+    }, 200);
+  }
+
+  window.addEventListener('resize', handleplotyresize);
+  window.addEventListener('orientationchange', function() {
+    setTimeout(handleplotyresize, 300);
+  });
+
+  if (typeof ResizeObserver !== 'undefined') {
+    const plotdiv = document.getElementById('plotchart');
+    const plotobserver = new ResizeObserver(function() {
+      handleplotyresize();
+    });
+    plotobserver.observe(plotdiv);
+  }
+</script>
 
 </body>
 </html>
